@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CH-Cook | Repas & Courses en Suisse</title>
+    <style>
+        :root {
+            --primary-red: #DA291C;
+            --bg-color: #F8F9FA;
+            --card-bg: #FFFFFF;
+            --text-main: #212529;
+            --text-muted: #6C757D;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        header h1 {
+            color: var(--primary-red);
+            margin: 0 0 8px 0;
+            font-size: 24px;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .section {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #EEEEEE;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #CED4DA;
+            border-radius: 8px;
+            font-size: 14px;
+            box-sizing: border-box;
+            background: #FFF;
+        }
+
+        .recipe-card {
+            background: #FFF5F5;
+            border-left: 4px solid var(--primary-red);
+            padding: 12px 16px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 16px;
+        }
+
+        ul {
+            padding-left: 20px;
+            margin: 8px 0;
+        }
+
+        li {
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        .total-box {
+            background: #E9ECEF;
+            padding: 16px;
+            border-radius: 8px;
+            text-align: right;
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--primary-red);
+        }
+
+        .btn {
+            background-color: var(--primary-red);
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>🇨🇭 CH-Cook</h1>
+        <p>L'assistant malin pour vos menus et vos courses en Suisse</p>
+    </header>
+
+    <div class="section">
+        <label for="personnes">Nombre de personnes :</label>
+        <input type="number" id="personnes" value="2" min="1" max="10" oninput="mettreAJour()">
+    </div>
+
+    <div class="section">
+        <label for="magasin">Enseigne partenaire :</label>
+        <select id="magasin" onchange="mettreAJour()">
+            <option value="Migros Online">Migros Online</option>
+            <option value="Coop.ch">Coop.ch</option>
+            <option value="Denner">Denner</option>
+        </select>
+    </div>
+
+    <div class="section">
+        <label for="recetteSelect">Choisissez votre plat du jour :</label>
+        <select id="recetteSelect" onchange="mettreAJour()">
+            <option value="zurichoise">Emincé de veau à la zurichoise</option>
+            <option value="alpler">Älplermagronen (Macaronis des alpes)</option>
+            <option value="fondue">Fondue moitié-moitié</option>
+        </select>
+    </div>
+
+    <div class="recipe-card" id="recipeInfo">
+        <!-- Rempli dynamiquement -->
+    </div>
+
+    <div class="section">
+        <label>Liste de courses optimisée pour <span id="spanMagasin">Migros Online</span> :</label>
+        <ul id="listeCourses">
+            <!-- Rempli dynamiquement -->
+        </ul>
+    </div>
+
+    <div class="total-box" id="totalBox">
+        Total estimé : 0.00 CHF
+    </div>
+
+    <button class="btn" onclick="validerPanier()">Valider et commander</button>
+</div>
+
+<script>
+    const recettes = {
+        zurichoise: {
+            nom: "Emincé de veau à la zurichoise",
+            temps: "30 min",
+            ingredients: [
+                { nom: "Veau (émincé)", baseQte: 400, unite: "g", prix: 14.50 },
+                { nom: "Champignons de Paris", baseQte: 250, unite: "g", prix: 3.20 },
+                { nom: "Crème entière suisse", baseQte: 200, unite: "ml", prix: 2.50 },
+                { nom: "Oignon & Vin blanc", baseQte: 1, unite: "pqt", prix: 3.00 }
+            ]
+        },
+        alpler: {
+            nom: "Älplermagronen",
+            temps: "25 min",
+            ingredients: [
+                { nom: "Macaronis suisses", baseQte: 250, unite: "g", prix: 1.80 },
+                { nom: "Pommes de terre", baseQte: 300, unite: "g", prix: 1.50 },
+                { nom: "Gruyère AOP râpé", baseQte: 150, unite: "g", prix: 4.20 },
+                { nom: "Compote de pommes", baseQte: 1, unite: "bocal", prix: 2.50 }
+            ]
+        },
+        fondue: {
+            nom: "Fondue moitié-moitié",
+            temps: "20 min",
+            ingredients: [
+                { nom: "Vacherin Fribourgeois AOP", baseQte: 300, unite: "g", prix: 8.50 },
+                { nom: "Gruyère AOP", baseQte: 300, unite: "g", prix: 7.80 },
+                { nom: "Pain mi-blanc (coupé en dés)", baseQte: 400, unite: "g", prix: 2.80 },
+                { nom: "Gousse d'ail & Vin blanc", baseQte: 1, unite: "pqt", prix: 4.50 }
+            ]
+        }
+    };
+
+    function mettreAJour() {
+        const nbPersonnes = parseInt(document.getElementById('personnes').value) || 1;
+        const magasin = document.getElementById('magasin').value;
+        const choixKey = document.getElementById('recetteSelect').value;
+        const recette = recettes[choixKey];
+
+        document.getElementById('spanMagasin').innerText = magasin;
+
+        // Facteur de proportion par rapport à la base de 2 personnes
+        const facteur = nbPersonnes / 2;
+
+        let htmlRecipe = `<strong>${recette.nom}</strong> (Pour ${nbPersonnes} personnes — ⏱️ ${recette.temps})`;
+        document.getElementById('recipeInfo').innerHTML = htmlRecipe;
+
+        let listeHtml = '';
+        let totalPrix = 0;
+
+        recette.ingredients.forEach(ing => {
+            const qteCalc = Math.round(ing.baseQte * facteur);
+            const prixCalc = ing.prix * facteur;
+            totalPrix += prixCalc;
+            listeHtml += `<li><b>${qteCalc} ${ing.unite}</b> de ${ing.nom} (~${prixCalc.toFixed(2)} CHF)</li>`;
+        });
+
+        document.getElementById('listeCourses').innerHTML = listeHtml;
+        document.getElementById('totalBox').innerText = `Total estimé : ${totalPrix.toFixed(2)} CHF`;
+    }
+
+    function validerPanier() {
+        const magasin = document.getElementById('magasin').value;
+        alert(`Succès ! Votre panier a été préparé pour ${magasin}. Prêt à être pitché aux enseignes suisses ! 🇨🇭`);
+    }
+
+    // Lancer au chargement initial
+    window.onload = mettreAJour;
+</script>
+
+</body>
+</html>
