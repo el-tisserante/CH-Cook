@@ -11,7 +11,7 @@
             --surface: #FFFFFF;
             --text-dark: #2D2A26;
             --text-muted: #8C8985;
-            --primary: #E35238; /* Couleur chaude type Romi */
+            --primary: #E35238;
             --primary-hover: #C9442D;
             --border: #EAE6DF;
             --radius-lg: 24px;
@@ -50,7 +50,6 @@
             border: 1px solid rgba(234, 230, 223, 0.6);
         }
 
-        /* HEADER WIZARD */
         .wizard-header {
             text-align: center;
             margin-bottom: 35px;
@@ -63,10 +62,7 @@
             margin-bottom: 8px;
         }
 
-        .wizard-header p {
-            color: var(--text-muted);
-            font-size: 15px;
-        }
+        .wizard-header p { color: var(--text-muted); font-size: 15px; }
 
         .progress-bar {
             display: flex;
@@ -83,27 +79,20 @@
             transition: all 0.3s ease;
         }
 
-        .step-dot.active {
-            background: var(--primary);
-            width: 60px;
-        }
+        .step-dot.active { background: var(--primary); width: 60px; }
 
-        /* STEPS VIEWS */
         .step-view {
             display: none;
             animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        .step-view.active {
-            display: block;
-        }
+        .step-view.active { display: block; }
 
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* SELECTION CARDS (Enseignes, Budget) */
         .grid-options {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -121,32 +110,12 @@
             background: #FAFAF8;
         }
 
-        .option-card:hover {
-            border-color: #D3CDC1;
-            background: var(--surface);
-        }
+        .option-card:hover { border-color: #D3CDC1; background: var(--surface); }
+        .option-card.selected { border-color: var(--primary); background: #FCF4F2; }
+        .option-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+        .option-card p { font-size: 12px; color: var(--text-muted); }
 
-        .option-card.selected {
-            border-color: var(--primary);
-            background: #FCF4F2;
-        }
-
-        .option-card h3 {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-
-        .option-card p {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        /* INPUTS */
-        .input-group {
-            margin-bottom: 25px;
-        }
-
+        .input-group { margin-bottom: 25px; }
         .input-group label {
             display: block;
             font-size: 14px;
@@ -155,7 +124,7 @@
             color: var(--text-dark);
         }
 
-        .text-input, .number-input {
+        .text-input, .number-input, select {
             width: 100%;
             padding: 16px 20px;
             border: 2px solid var(--border);
@@ -166,12 +135,11 @@
             transition: border 0.2s;
         }
 
-        .text-input:focus, .number-input:focus {
+        .text-input:focus, .number-input:focus, select:focus {
             border-color: var(--primary);
             background: var(--surface);
         }
 
-        /* BUTTONS */
         .btn {
             width: 100%;
             padding: 18px;
@@ -188,19 +156,10 @@
         .btn:hover { background: var(--primary-hover); }
         .btn:active { transform: scale(0.98); }
         
-        .btn-outline {
-            background: transparent;
-            color: var(--text-muted);
-            margin-top: 15px;
-        }
+        .btn-outline { background: transparent; color: var(--text-muted); margin-top: 15px; }
         .btn-outline:hover { background: #FAFAF8; color: var(--text-dark); }
 
-        /* LOADING STATE */
-        .loading-screen {
-            text-align: center;
-            padding: 40px 0;
-        }
-
+        .loading-screen { text-align: center; padding: 40px 0; }
         .spinner {
             width: 50px;
             height: 50px;
@@ -210,10 +169,8 @@
             animation: spin 1s linear infinite;
             margin: 0 auto 20px auto;
         }
-
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        /* RESULT VIEW */
         .result-header {
             background: #FCF4F2;
             border-radius: var(--radius-md);
@@ -247,6 +204,7 @@
             margin-bottom: 20px;
         }
         .total-box h3 { font-size: 24px; color: var(--text-dark); }
+        .error-msg { color: var(--primary); font-size: 14px; font-weight: 600; margin-bottom: 15px; display: none; text-align: center; }
 
     </style>
 </head>
@@ -279,7 +237,7 @@
                 <h3>Denner</h3>
                 <p>Prix discount</p>
             </div>
-            <div class="option-card" onclick="selectMagasin('Aldi', 0.80, this)">
+            <div class="option-card" onclick="selectMagasin('Aldi Suisse', 0.80, this)">
                 <h3>Aldi Suisse</h3>
                 <p>L'essentiel malin</p>
             </div>
@@ -287,7 +245,7 @@
 
         <div class="input-group">
             <label>Pour combien de personnes cuisines-tu ?</label>
-            <input type="number" id="inputPersonnes" class="number-input" value="2" min="1" max="10">
+            <input type="number" id="inputPersonnes" class="number-input" value="2" min="1" max="12">
         </div>
 
         <button class="btn" onclick="goToStep(2)">Continuer</button>
@@ -301,19 +259,15 @@
         </div>
 
         <div class="input-group">
-            <label>Budget souhaité par personne :</label>
+            <label>Niveau de prix souhaité :</label>
             <div class="grid-options">
                 <div class="option-card selected" onclick="selectBudget('eco', this)">
                     <h3>Éco</h3>
-                    <p>< 5 CHF / pers.</p>
+                    <p>M-Budget / Prix Garantie</p>
                 </div>
                 <div class="option-card" onclick="selectBudget('standard', this)">
                     <h3>Standard</h3>
-                    <p>~ 8 CHF / pers.</p>
-                </div>
-                <div class="option-card" onclick="selectBudget('plaisir', this)">
-                    <h3>Plaisir</h3>
-                    <p>Sans limite</p>
+                    <p>Marques classiques</p>
                 </div>
             </div>
         </div>
@@ -324,7 +278,6 @@
                 <option value="none">Aucune restriction</option>
                 <option value="vege">Végétarien 🌿</option>
                 <option value="vegan">Vegan 🌱</option>
-                <option value="sans_gluten">Sans gluten 🌾</option>
             </select>
         </div>
 
@@ -332,31 +285,33 @@
         <button class="btn btn-outline" onclick="goToStep(1)">Retour</button>
     </div>
 
-    <!-- ÉTAPE 3 : ENVIES & RECHERCHE INFINIE -->
+    <!-- ÉTAPE 3 : ENVIES & RECHERCHE -->
     <div class="step-view" id="step3">
         <div class="wizard-header">
             <h1>Tes envies.</h1>
-            <p>Dis-nous tout. Pâtes, saumon, healthy, comfort food...</p>
+            <p>Dis-nous ce que tu veux manger (ex: lasagnes, risotto, poulet curry, quiche...)</p>
         </div>
 
         <div class="input-group">
-            <input type="text" id="inputEnvie" class="text-input" placeholder="Ex: J'ai envie de pâtes au pesto..." onkeypress="handleEnter(event)">
+            <input type="text" id="inputEnvie" class="text-input" placeholder="Ex: J'ai très envie de lasagnes..." onkeypress="handleEnter(event)">
         </div>
+        
+        <p class="error-msg" id="errorMsg"></p>
 
         <button class="btn" onclick="lancerRecherche()">Créer mon repas magique ✨</button>
         <button class="btn btn-outline" onclick="goToStep(2)">Retour</button>
     </div>
 
-    <!-- ÉTAPE LOADING (SIMULATION) -->
+    <!-- ÉTAPE LOADING -->
     <div class="step-view" id="stepLoading">
         <div class="loading-screen">
             <div class="spinner"></div>
             <h2 style="margin-bottom: 8px;">Recherche en cours...</h2>
-            <p style="color: var(--text-muted);" id="loadingText">Analyse de 15 423 recettes...</p>
+            <p style="color: var(--text-muted);" id="loadingText">Parcours de la base de données...</p>
         </div>
     </div>
 
-    <!-- ÉTAPE RESULTAT : LA RECETTE PARFAITE -->
+    <!-- ÉTAPE RESULTAT -->
     <div class="step-view" id="stepResult">
         <div class="result-header">
             <span class="emoji" id="resEmoji">🍝</span>
@@ -374,29 +329,145 @@
             <h3 id="resTotal">0.00 CHF</h3>
         </div>
 
-        <button class="btn" onclick="alert('Ajouté au panier du supermarché !')">Commander les ingrédients 🛒</button>
-        <button class="btn btn-outline" onclick="goToStep(1)">Recommencer</button>
+        <button class="btn" onclick="alert('Redirection vers le site du supermarché !')">Commander les ingrédients 🛒</button>
+        <button class="btn btn-outline" onclick="goToStep(1)">Recommencer une recherche</button>
     </div>
 
 </div>
 
 <script>
-    // ETAT DE L'APPLICATION
-    const state = {
-        magasin: 'Migros',
-        magasinCoeff: 1.0,
-        personnes: 2,
-        budget: 'eco',
-        regime: 'none',
-        envie: ''
-    };
+    const state = { magasin: 'Migros', magasinCoeff: 1.0, personnes: 2, budget: 'eco', regime: 'none', envie: '' };
 
-    // NAVIGATION WIZARD
+    // VRAIE BASE DE DONNÉES DE RECETTES (Détaillée et réaliste)
+    const baseRecettes = [
+        {
+            motsCles: ["lasagnes", "lasagne", "bolognaise", "italien", "pâtes"],
+            titre: "Lasagnes traditionnelles à la Bolognaise",
+            emoji: "🍝",
+            temps: "1h 15min",
+            desc: "De délicieuses couches de pâtes, viande hachée, béchamel onctueuse et fromage gratiné.",
+            vege: false, vegan: false,
+            ingredients: [
+                { nom: "Feuilles de lasagnes sèches", baseQte: 250, unite: "g", prixRef: 2.50 },
+                { nom: "Viande hachée de bœuf suisse", baseQte: 500, unite: "g", prixRef: 9.50 },
+                { nom: "Coulis de tomate (Passata)", baseQte: 700, unite: "ml", prixRef: 3.20 },
+                { nom: "Oignons et Carottes fraîches", baseQte: 2, unite: "pce", prixRef: 1.50 },
+                { nom: "Lait entier (pour béchamel)", baseQte: 50, unite: "cl", prixRef: 1.20 },
+                { nom: "Beurre et Farine", baseQte: 1, unite: "portion", prixRef: 1.80 },
+                { nom: "Gruyère AOP ou Parmesan râpé", baseQte: 150, unite: "g", prixRef: 4.50 }
+            ]
+        },
+        {
+            motsCles: ["pesto", "pates", "pâtes", "basilic", "linguine"],
+            titre: "Pâtes au Pesto frais et pignons grillés",
+            emoji: "🌿",
+            temps: "15 min",
+            desc: "Rapide, savoureux et incontournable pour les soirs pressés.",
+            vege: true, vegan: false,
+            ingredients: [
+                { nom: "Pâtes (Penne, Linguine, Spaghetti)", baseQte: 300, unite: "g", prixRef: 2.20 },
+                { nom: "Pesto frais au basilic (pot)", baseQte: 150, unite: "g", prixRef: 4.50 },
+                { nom: "Parmigiano Reggiano AOP", baseQte: 80, unite: "g", prixRef: 3.80 },
+                { nom: "Pignons de pin", baseQte: 50, unite: "g", prixRef: 4.20 },
+                { nom: "Tomates cerises", baseQte: 200, unite: "g", prixRef: 2.50 }
+            ]
+        },
+        {
+            motsCles: ["poulet", "curry", "indien", "coco", "riz"],
+            titre: "Poulet au Curry et Lait de Coco",
+            emoji: "🍛",
+            temps: "30 min",
+            desc: "Un plat exotique et réconfortant, servi avec du riz parfumé.",
+            vege: false, vegan: false,
+            ingredients: [
+                { nom: "Émincé de poulet (suisse)", baseQte: 400, unite: "g", prixRef: 11.50 },
+                { nom: "Lait de coco (conserve)", baseQte: 400, unite: "ml", prixRef: 2.50 },
+                { nom: "Pâte de curry rouge ou jaune", baseQte: 1, unite: "pot", prixRef: 3.50 },
+                { nom: "Riz Basmati ou Jasmin", baseQte: 250, unite: "g", prixRef: 2.80 },
+                { nom: "Oignon rouge & Coriandre", baseQte: 1, unite: "botte", prixRef: 2.50 }
+            ]
+        },
+        {
+            motsCles: ["quiche", "lorraine", "tarte", "lardons", "oeufs"],
+            titre: "Quiche Lorraine traditionnelle",
+            emoji: "🥧",
+            temps: "45 min",
+            desc: "La vraie recette avec une pâte croustillante, des lardons fumés et un appareil onctueux.",
+            vege: false, vegan: false,
+            ingredients: [
+                { nom: "Pâte brisée pur beurre", baseQte: 1, unite: "rouleau", prixRef: 3.20 },
+                { nom: "Lardons fumés", baseQte: 200, unite: "g", prixRef: 4.50 },
+                { nom: "Crème entière 35%", baseQte: 250, unite: "ml", prixRef: 2.80 },
+                { nom: "Œufs frais suisses", baseQte: 4, unite: "pce", prixRef: 2.40 },
+                { nom: "Noix de muscade & poivre", baseQte: 1, unite: "pincée", prixRef: 1.00 }
+            ]
+        },
+        {
+            motsCles: ["risotto", "champignons", "riz", "italien"],
+            titre: "Risotto crémeux aux champignons",
+            emoji: "🍄",
+            temps: "35 min",
+            desc: "Riz Arborio cuit lentement dans son bouillon, champignons frais et parmesan.",
+            vege: true, vegan: false,
+            ingredients: [
+                { nom: "Riz pour risotto (Arborio)", baseQte: 300, unite: "g", prixRef: 3.50 },
+                { nom: "Champignons de Paris frais", baseQte: 400, unite: "g", prixRef: 4.80 },
+                { nom: "Bouillon de légumes", baseQte: 1, unite: "litre", prixRef: 1.50 },
+                { nom: "Vin blanc sec (cuisine)", baseQte: 1, unite: "bouteille", prixRef: 5.50 },
+                { nom: "Beurre et Parmesan AOP", baseQte: 100, unite: "g", prixRef: 4.00 }
+            ]
+        },
+        {
+            motsCles: ["burger", "hamburger", "frites", "boeuf"],
+            titre: "Burger Maison façon Chef & Frites",
+            emoji: "🍔",
+            temps: "30 min",
+            desc: "Pains briochés, steaks juteux, cheddar fondu et oignons caramélisés.",
+            vege: false, vegan: false,
+            ingredients: [
+                { nom: "Pains à burger (Buns briochés)", baseQte: 2, unite: "pce", prixRef: 3.50 },
+                { nom: "Viande de bœuf hachée", baseQte: 350, unite: "g", prixRef: 7.50 },
+                { nom: "Tranches de Cheddar affiné", baseQte: 4, unite: "tranche", prixRef: 3.20 },
+                { nom: "Salade iceberg & Tomate", baseQte: 1, unite: "pce", prixRef: 2.50 },
+                { nom: "Pommes de terre (pour frites)", baseQte: 600, unite: "g", prixRef: 2.80 }
+            ]
+        },
+        {
+            motsCles: ["fondue", "suisse", "fromage", "moitie", "vacherin", "gruyere"],
+            titre: "Fondue Moitié-Moitié traditionnelle",
+            emoji: "🧀",
+            temps: "20 min",
+            desc: "Le summum du réconfort helvétique avec du Gruyère AOP et du Vacherin Fribourgeois.",
+            vege: true, vegan: false,
+            ingredients: [
+                { nom: "Gruyère AOP suisse", baseQte: 400, unite: "g", prixRef: 9.50 },
+                { nom: "Vacherin Fribourgeois AOP", baseQte: 400, unite: "g", prixRef: 10.50 },
+                { nom: "Pain mi-blanc artisanal", baseQte: 500, unite: "g", prixRef: 3.50 },
+                { nom: "Vin blanc sec (Fendant)", baseQte: 3, unite: "dl", prixRef: 4.50 },
+                { nom: "Gousse d'ail & Maïzena", baseQte: 1, unite: "portion", prixRef: 1.00 }
+            ]
+        },
+        {
+            motsCles: ["salade", "cesar", "poulet", "healthy", "croutons"],
+            titre: "Salade César au poulet grillé",
+            emoji: "🥗",
+            temps: "20 min",
+            desc: "Laitue croquante, poulet rôti, sauce onctueuse, copeaux de parmesan et croûtons dorés.",
+            vege: false, vegan: false,
+            ingredients: [
+                { nom: "Salade Romaine", baseQte: 1, unite: "pce", prixRef: 2.50 },
+                { nom: "Filet de poulet suisse", baseQte: 300, unite: "g", prixRef: 9.50 },
+                { nom: "Sauce César authentique", baseQte: 1, unite: "flacon", prixRef: 3.80 },
+                { nom: "Croûtons à l'ail", baseQte: 1, unite: "sachet", prixRef: 2.20 },
+                { nom: "Parmesan en copeaux", baseQte: 50, unite: "g", prixRef: 3.50 }
+            ]
+        }
+    ];
+
     function goToStep(step) {
+        document.getElementById('errorMsg').style.display = 'none';
         document.querySelectorAll('.step-view').forEach(el => el.classList.remove('active'));
         document.getElementById('step' + step).classList.add('active');
-        
-        // Update Progress Bar
         const dots = document.querySelectorAll('.step-dot');
         dots.forEach((dot, index) => {
             if(index < step) dot.classList.add('active');
@@ -406,10 +477,8 @@
 
     function handleEnter(e) { if(e.key === 'Enter') lancerRecherche(); }
 
-    // SELECTIONS
     function selectMagasin(nom, coeff, el) {
-        state.magasin = nom;
-        state.magasinCoeff = coeff;
+        state.magasin = nom; state.magasinCoeff = coeff;
         const siblings = el.parentElement.children;
         for(let s of siblings) s.classList.remove('selected');
         el.classList.add('selected');
@@ -422,97 +491,87 @@
         el.classList.add('selected');
     }
 
-    // LE MOTEUR MAGIQUE DE GÉNÉRATION (Génère une infinité de recettes basées sur les mots-clés)
     function lancerRecherche() {
         state.personnes = parseInt(document.getElementById('inputPersonnes').value) || 2;
         state.regime = document.getElementById('inputRegime').value;
-        state.envie = document.getElementById('inputEnvie').value.toLowerCase();
+        const requete = document.getElementById('inputEnvie').value.toLowerCase().trim();
 
-        // Afficher l'écran de chargement
+        if (requete === '') {
+            const err = document.getElementById('errorMsg');
+            err.innerText = "Dis-nous ce que tu veux manger avant de continuer !";
+            err.style.display = 'block';
+            return;
+        }
+
         document.querySelectorAll('.step-view').forEach(el => el.classList.remove('active'));
         document.getElementById('stepLoading').classList.add('active');
         document.getElementById('progressBar').style.display = 'none';
 
-        setTimeout(() => { document.getElementById('loadingText').innerText = "Adaptation au catalogue " + state.magasin + "..."; }, 1000);
-        setTimeout(() => { document.getElementById('loadingText').innerText = "Calcul des portions et des prix..."; }, 2000);
+        setTimeout(() => { document.getElementById('loadingText').innerText = "Vérification des recettes et des prix chez " + state.magasin + "..."; }, 1200);
 
         setTimeout(() => {
-            genererRecetteSurMesure();
+            afficherResultat(requete);
             document.getElementById('stepLoading').classList.remove('active');
             document.getElementById('stepResult').classList.add('active');
-        }, 3000);
+        }, 2500);
     }
 
-    function genererRecetteSurMesure() {
-        let baseTitre = "Poêlée gourmande";
-        let baseDesc = "Un plat facile, rapide et réconfortant pour la semaine.";
-        let emoji = "🍲";
+    function afficherResultat(requete) {
+        // Algorithme de recherche dans la base JSON
+        let recetteTrouvee = null;
         
-        // Prix de base par ingrédient selon le budget choisi
-        let prixBase = state.budget === 'eco' ? 1.5 : (state.budget === 'standard' ? 2.5 : 4.5);
-        let ingredients = [];
-
-        // L'algorithme "comprend" ce que l'utilisateur tape
-        if (state.envie.includes('pâte') || state.envie.includes('pate') || state.envie.includes('pesto')) {
-            baseTitre = "Pâtes au Pesto et Parmesan";
-            emoji = "🍝";
-            ingredients.push({ nom: "Pâtes de qualité", qte: 120, unite: "g" });
-            ingredients.push({ nom: "Pesto au basilic frais", qte: 0.5, unite: "pot" });
-            ingredients.push({ nom: "Parmesan râpé", qte: 30, unite: "g" });
-        } else if (state.envie.includes('burger')) {
-            baseTitre = "Burger Maison & Frites";
-            emoji = "🍔";
-            ingredients.push({ nom: "Pains à burger artisanaux", qte: 1, unite: "pce" });
-            ingredients.push({ nom: state.regime === 'vege' ? "Steak végétal" : "Viande hachée suisse", qte: 150, unite: "g" });
-            ingredients.push({ nom: "Cheddar & Salade", qte: 1, unite: "portion" });
-        } else if (state.envie.includes('poulet')) {
-            baseTitre = "Poulet rôti et petits légumes";
-            emoji = "🍗";
-            ingredients.push({ nom: "Filet de poulet suisse", qte: 200, unite: "g" });
-            ingredients.push({ nom: "Légumes de saison (Courgettes, Carottes)", qte: 250, unite: "g" });
-        } else if (state.envie.includes('fondue') || state.envie.includes('suisse')) {
-            baseTitre = "Fondue Moitié-Moitié Traditionnelle";
-            emoji = "🧀";
-            ingredients.push({ nom: "Mélange Fondue (Gruyère/Vacherin)", qte: 200, unite: "g" });
-            ingredients.push({ nom: "Pain mi-blanc", qte: 200, unite: "g" });
-        } else {
-            // Recette générique élégante
-            const motCle = state.envie ? state.envie : "Légumes de saison";
-            baseTitre = "Déclinaison autour de : " + motCle;
-            emoji = "✨";
-            ingredients.push({ nom: "Ingrédient principal : " + motCle, qte: 200, unite: "g" });
-            ingredients.push({ nom: "Accompagnement (Riz ou Pâtes)", qte: 100, unite: "g" });
-            ingredients.push({ nom: "Sauce & Aromates", qte: 1, unite: "pqt" });
+        // Recherche par mots-clés
+        for (let r of baseRecettes) {
+            if (r.motsCles.some(mot => requete.includes(mot)) || r.titre.toLowerCase().includes(requete)) {
+                
+                // Vérification stricte des régimes alimentaires
+                if (state.regime === 'vege' && !r.vege) continue; // Si végé demandé mais recette avec viande, on passe
+                if (state.regime === 'vegan' && !r.vegan) continue; 
+                
+                recetteTrouvee = r;
+                break; // Trouvé !
+            }
         }
 
-        // MAJ Interface
-        document.getElementById('resTitle').innerText = baseTitre;
-        document.getElementById('resDesc').innerText = baseDesc;
-        document.getElementById('resEmoji').innerText = emoji;
+        // Fallback GRACIEUX si la recherche échoue
+        if (!recetteTrouvee) {
+            // S'il ne trouve rien d'exact, il choisit une excellente recette par défaut (ex: risotto)
+            recetteTrouvee = baseRecettes.find(r => r.motsCles.includes("risotto"));
+            document.getElementById('resDesc').innerHTML = `<em>Nous n'avons pas trouvé la recette exacte pour "${requete}", mais voici une merveilleuse alternative :</em><br>` + recetteTrouvee.desc;
+        } else {
+            document.getElementById('resDesc').innerText = recetteTrouvee.desc + " • " + recetteTrouvee.temps;
+        }
+
+        // Affichage des données de la recette trouvée
+        document.getElementById('resTitle').innerText = recetteTrouvee.titre;
+        document.getElementById('resEmoji').innerText = recetteTrouvee.emoji;
         document.getElementById('resMagasin').innerText = state.magasin;
 
-        let total = 0;
+        let totalPanier = 0;
         let listHTML = '';
 
-        ingredients.forEach(ing => {
-            // Calcul mathématique simulant l'adaptation au nombre de personnes et au supermarché
-            let qteTotale = ing.qte * state.personnes;
-            let prixCalcule = (prixBase * state.personnes) * state.magasinCoeff;
+        // Modificateur de prix basé sur le budget (Eco = -15% / Standard = normal)
+        let multiplicateurBudget = state.budget === 'eco' ? 0.85 : 1.0;
+
+        recetteTrouvee.ingredients.forEach(ing => {
+            // Le calcul proportionnel par rapport à la base (conçue pour 2 personnes dans la DB)
+            let proportion = state.personnes / 2;
+            let qteCalculee = Math.ceil(ing.baseQte * proportion);
             
-            // Randomisation légère du prix pour faire "vrai"
-            prixCalcule = prixCalcule * (0.8 + Math.random() * 0.4); 
-            total += prixCalcule;
+            // Calcul du prix : Prix de base * proportion * coefficient magasin * budget
+            let prixCalcule = (ing.prixRef * proportion) * state.magasinCoeff * multiplicateurBudget;
+            totalPanier += prixCalcule;
 
             listHTML += `
                 <li class="list-item">
-                    <span>${qteTotale} ${ing.unite} de <b>${ing.nom}</b></span>
-                    <span style="color: var(--text-muted);">~${prixCalcule.toFixed(2)} CHF</span>
+                    <span><b>${qteCalculee} ${ing.unite}</b> de ${ing.nom}</span>
+                    <span style="color: var(--text-muted); font-weight: 500;">~${prixCalcule.toFixed(2)} CHF</span>
                 </li>
             `;
         });
 
         document.getElementById('resList').innerHTML = listHTML;
-        document.getElementById('resTotal').innerText = total.toFixed(2) + ' CHF';
+        document.getElementById('resTotal').innerText = totalPanier.toFixed(2) + ' CHF';
     }
 </script>
 
