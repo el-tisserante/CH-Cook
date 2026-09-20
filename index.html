@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CH-Cook | Repas & Courses en Suisse</title>
+    <title>CH-Cook | L'assistant repas & courses en Suisse</title>
     <style>
         :root {
-            --primary-red: #DA291C;
-            --bg-color: #F8F9FA;
+            --ch-red: #DA291C;
+            --ch-red-hover: #b52014;
+            --bg-color: #F4F6F9;
             --card-bg: #FFFFFF;
-            --text-main: #212529;
+            --text-main: #1A1A1A;
             --text-muted: #6C757D;
+            --border-color: #E2E8F0;
         }
 
         body {
@@ -22,35 +24,37 @@
         }
 
         .container {
-            max-width: 600px;
+            max-width: 650px;
             margin: 0 auto;
             background: var(--card-bg);
-            padding: 24px;
+            padding: 30px;
             border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
         }
 
         header {
             text-align: center;
-            margin-bottom: 24px;
+            margin-bottom: 30px;
         }
 
         header h1 {
-            color: var(--primary-red);
+            color: var(--ch-red);
             margin: 0 0 8px 0;
-            font-size: 24px;
+            font-size: 28px;
         }
 
         header p {
             color: var(--text-muted);
-            font-size: 14px;
+            font-size: 15px;
             margin: 0;
         }
 
-        .section {
+        .card-section {
+            background: #FAFAFA;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 12px;
             margin-bottom: 20px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #EEEEEE;
         }
 
         label {
@@ -58,61 +62,111 @@
             font-weight: 600;
             margin-bottom: 8px;
             font-size: 14px;
+            color: #333;
         }
 
         select, input {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #CED4DA;
+            padding: 12px;
+            border: 1px solid var(--border-color);
             border-radius: 8px;
-            font-size: 14px;
+            font-size: 15px;
             box-sizing: border-box;
             background: #FFF;
+            outline: none;
+            transition: border-color 0.2s;
         }
 
-        .recipe-card {
+        select:focus, input:focus {
+            border-color: var(--ch-red);
+        }
+
+        .recipe-box {
             background: #FFF5F5;
-            border-left: 4px solid var(--primary-red);
-            padding: 12px 16px;
-            border-radius: 0 8px 8px 0;
-            margin-bottom: 16px;
+            border-left: 5px solid var(--ch-red);
+            padding: 15px 20px;
+            border-radius: 0 12px 12px 0;
+            margin-bottom: 20px;
         }
 
-        ul {
-            padding-left: 20px;
-            margin: 8px 0;
-        }
-
-        li {
-            margin-bottom: 6px;
-            font-size: 14px;
-        }
-
-        .total-box {
-            background: #E9ECEF;
-            padding: 16px;
-            border-radius: 8px;
-            text-align: right;
+        .recipe-box h3 {
+            margin: 0 0 5px 0;
+            color: var(--ch-red);
             font-size: 18px;
+        }
+
+        .recipe-box p {
+            margin: 0;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .shopping-list {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0;
+        }
+
+        .shopping-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #EEEEEE;
+            font-size: 15px;
+        }
+
+        .shopping-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-name {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .item-name input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--ch-red);
+            cursor: pointer;
+        }
+
+        .total-banner {
+            background: #1A1A1A;
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        .total-price {
+            color: #FFD700;
             font-weight: bold;
-            color: var(--primary-red);
+            font-size: 22px;
         }
 
         .btn {
-            background-color: var(--primary-red);
+            background-color: var(--ch-red);
             color: white;
             border: none;
-            padding: 12px;
+            padding: 14px;
             width: 100%;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            margin-top: 10px;
+            margin-top: 15px;
+            transition: background-color 0.2s;
         }
 
         .btn:hover {
-            opacity: 0.9;
+            background-color: var(--ch-red-hover);
         }
     </style>
 </head>
@@ -121,48 +175,57 @@
 <div class="container">
     <header>
         <h1>🇨🇭 CH-Cook</h1>
-        <p>L'assistant malin pour vos menus et vos courses en Suisse</p>
+        <p>L'application suisse de planification de repas et de courses connectées</p>
     </header>
 
-    <div class="section">
-        <label for="personnes">Nombre de personnes :</label>
-        <input type="number" id="personnes" value="2" min="1" max="10" oninput="mettreAJour()">
+    <div class="card-section">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div>
+                <label for="personnes">Nombre de personnes :</label>
+                <input type="number" id="personnes" value="2" min="1" max="10" oninput="actualiserApp()">
+            </div>
+            <div>
+                <label for="magasin">Enseigne choisie :</label>
+                <select id="magasin" onchange="actualiserApp()">
+                    <option value="Migros" data-coeff="1.0">Migros (M-Budget / Bio)</option>
+                    <option value="Coop" data-coeff="1.02">Coop (Prix Garantie)</option>
+                    <option value="Denner" data-coeff="0.88">Denner (Discounter)</option>
+                    <option value="Aldi Suisse" data-coeff="0.85">Aldi Suisse</option>
+                    <option value="Lidl Suisse" data-coeff="0.85">Lidl Suisse</option>
+                    <option value="Manor Food" data-coeff="1.10">Manor Food (Terroir)</option>
+                    <option value="Volg" data-coeff="1.05">Volg (Proximité)</option>
+                </select>
+            </div>
+        </div>
+
+        <div style="margin-top: 15px;">
+            <label for="recetteSelect">Sélectionnez votre recette :</label>
+            <select id="recetteSelect" onchange="actualiserApp()">
+                <option value="zurichoise">Emincé de veau à la zurichoise & Rösti</option>
+                <option value="alpler">Älplermagronen (Macaronis des alpes)</option>
+                <option value="fondue">Fondue moitié-moitié fribourgeoise</option>
+                <option value="malakoffs">Malakoffs croustillants & Salade</option>
+            </select>
+        </div>
     </div>
 
-    <div class="section">
-        <label for="magasin">Enseigne partenaire :</label>
-        <select id="magasin" onchange="mettreAJour()">
-            <option value="Migros Online">Migros Online</option>
-            <option value="Coop.ch">Coop.ch</option>
-            <option value="Denner">Denner</option>
-        </select>
+    <div class="recipe-box" id="recipeHeader">
+        <!-- Dynamique -->
     </div>
 
-    <div class="section">
-        <label for="recetteSelect">Choisissez votre plat du jour :</label>
-        <select id="recetteSelect" onchange="mettreAJour()">
-            <option value="zurichoise">Emincé de veau à la zurichoise</option>
-            <option value="alpler">Älplermagronen (Macaronis des alpes)</option>
-            <option value="fondue">Fondue moitié-moitié</option>
-        </select>
-    </div>
-
-    <div class="recipe-card" id="recipeInfo">
-        <!-- Rempli dynamiquement -->
-    </div>
-
-    <div class="section">
-        <label>Liste de courses optimisée pour <span id="spanMagasin">Migros Online</span> :</label>
-        <ul id="listeCourses">
-            <!-- Rempli dynamiquement -->
+    <div class="card-section">
+        <label>Liste de courses interactive pour <span id="labelMagasinNom" style="color:var(--ch-red)">Migros</span> :</label>
+        <ul class="shopping-list" id="listeCourses">
+            <!-- Dynamique -->
         </ul>
     </div>
 
-    <div class="total-box" id="totalBox">
-        Total estimé : 0.00 CHF
+    <div class="total-banner">
+        <span>Estimation du panier :</span>
+        <span class="total-price" id="totalBox">0.00 CHF</span>
     </div>
 
-    <button class="btn" onclick="validerPanier()">Valider et commander</button>
+    <button class="btn" onclick="simulerCommande()">Générer le panier pour l'enseigne 🇨🇭</button>
 </div>
 
 <script>
@@ -171,69 +234,96 @@
             nom: "Emincé de veau à la zurichoise",
             temps: "30 min",
             ingredients: [
-                { nom: "Veau (émincé)", baseQte: 400, unite: "g", prix: 14.50 },
-                { nom: "Champignons de Paris", baseQte: 250, unite: "g", prix: 3.20 },
-                { nom: "Crème entière suisse", baseQte: 200, unite: "ml", prix: 2.50 },
-                { nom: "Oignon & Vin blanc", baseQte: 1, unite: "pqt", prix: 3.00 }
+                { nom: "Veau suisse (émincé)", baseQte: 400, unite: "g", prixRef: 14.50 },
+                { nom: "Champignons de Paris", baseQte: 250, unite: "g", prixRef: 3.20 },
+                { nom: "Crème entière suisse", baseQte: 200, unite: "ml", prixRef: 2.50 },
+                { nom: "Oignons & Vin blanc", baseQte: 1, unite: "pqt", prixRef: 3.00 }
             ]
         },
         alpler: {
-            nom: "Älplermagronen",
+            nom: "Älplermagronen traditionnelles",
             temps: "25 min",
             ingredients: [
-                { nom: "Macaronis suisses", baseQte: 250, unite: "g", prix: 1.80 },
-                { nom: "Pommes de terre", baseQte: 300, unite: "g", prix: 1.50 },
-                { nom: "Gruyère AOP râpé", baseQte: 150, unite: "g", prix: 4.20 },
-                { nom: "Compote de pommes", baseQte: 1, unite: "bocal", prix: 2.50 }
+                { nom: "Macaronis suisses", baseQte: 250, unite: "g", prixRef: 1.80 },
+                { nom: "Pommes de terre du pays", baseQte: 300, unite: "g", prixRef: 1.50 },
+                { nom: "Gruyère AOP râpé", baseQte: 150, unite: "g", prixRef: 4.20 },
+                { nom: "Compote de pommes", baseQte: 1, unite: "bocal", prixRef: 2.50 }
             ]
         },
         fondue: {
             nom: "Fondue moitié-moitié",
             temps: "20 min",
             ingredients: [
-                { nom: "Vacherin Fribourgeois AOP", baseQte: 300, unite: "g", prix: 8.50 },
-                { nom: "Gruyère AOP", baseQte: 300, unite: "g", prix: 7.80 },
-                { nom: "Pain mi-blanc (coupé en dés)", baseQte: 400, unite: "g", prix: 2.80 },
-                { nom: "Gousse d'ail & Vin blanc", baseQte: 1, unite: "pqt", prix: 4.50 }
+                { nom: "Vacherin Fribourgeois AOP", baseQte: 300, unite: "g", prixRef: 8.50 },
+                { nom: "Gruyère AOP", baseQte: 300, unite: "g", prixRef: 7.80 },
+                { nom: "Pain mi-blanc artisanal", baseQte: 400, unite: "g", prixRef: 2.80 },
+                { nom: "Gousse d'ail & Fendant", baseQte: 1, unite: "pqt", prixRef: 4.50 }
+            ]
+        },
+        malakoffs: {
+            nom: "Malakoffs de Vinzel & Salade",
+            temps: "20 min",
+            ingredients: [
+                { nom: "Fromage dur râpé (L'Etivaz/Gruyère)", baseQte: 400, unite: "g", prixRef: 9.00 },
+                { nom: "Pain de mie tranché", baseQte: 1, unite: "paquet", prixRef: 2.50 },
+                { nom: "Œufs & Ail", baseQte: 1, unite: "pqt", prixRef: 2.00 },
+                { nom: "Salade verte & Sauce", baseQte: 1, unite: "sachet", prixRef: 3.20 }
             ]
         }
     };
 
-    function mettreAJour() {
+    function actualiserApp() {
         const nbPersonnes = parseInt(document.getElementById('personnes').value) || 1;
-        const magasin = document.getElementById('magasin').value;
+        const selectMagasin = document.getElementById('magasin');
+        const magasinNom = selectMagasin.value;
+        const coeffPrix = parseFloat(selectMagasin.options[selectMagasin.selectedIndex].getAttribute('data-coeff'));
+        
         const choixKey = document.getElementById('recetteSelect').value;
         const recette = recettes[choixKey];
 
-        document.getElementById('spanMagasin').innerText = magasin;
+        document.getElementById('labelMagasinNom').innerText = magasinNom;
 
-        // Facteur de proportion par rapport à la base de 2 personnes
+        // Facteur proportionnel (base 2 personnes)
         const facteur = nbPersonnes / 2;
 
-        let htmlRecipe = `<strong>${recette.nom}</strong> (Pour ${nbPersonnes} personnes — ⏱️ ${recette.temps})`;
-        document.getElementById('recipeInfo').innerHTML = htmlRecipe;
+        // En-tête recette
+        document.getElementById('recipeHeader').innerHTML = `
+            <h3>${recette.nom}</h3>
+            <p>Pour ${nbPersonnes} personnes — ⏱️ Temps de préparation : ${recette.temps}</p>
+        `;
 
         let listeHtml = '';
         let totalPrix = 0;
 
-        recette.ingredients.forEach(ing => {
+        recette.ingredients.forEach((ing, index) => {
             const qteCalc = Math.round(ing.baseQte * facteur);
-            const prixCalc = ing.prix * facteur;
+            // Application d'un coefficient fictif selon l'enseigne choisie (discounter vs premium)
+            const prixCalc = (ing.prixRef * facteur) * coeffPrix;
             totalPrix += prixCalc;
-            listeHtml += `<li><b>${qteCalc} ${ing.unite}</b> de ${ing.nom} (~${prixCalc.toFixed(2)} CHF)</li>`;
+
+            listeHtml += `
+                <li class="shopping-item">
+                    <div class="item-name">
+                        <input type="checkbox" id="item-${index}">
+                        <label for="item-${index}" style="margin:0; font-weight:normal; cursor:pointer;">
+                            <b>${qteCalc} ${ing.unite}</b> de ${ing.nom}
+                        </label>
+                    </div>
+                    <span style="color: var(--text-muted); font-weight: 500;">~${prixCalc.toFixed(2)} CHF</span>
+                </li>
+            `;
         });
 
         document.getElementById('listeCourses').innerHTML = listeHtml;
-        document.getElementById('totalBox').innerText = `Total estimé : ${totalPrix.toFixed(2)} CHF`;
+        document.getElementById('totalBox').innerText = `${totalPrix.toFixed(2)} CHF`;
     }
 
-    function validerPanier() {
+    function simulerCommande() {
         const magasin = document.getElementById('magasin').value;
-        alert(`Succès ! Votre panier a été préparé pour ${magasin}. Prêt à être pitché aux enseignes suisses ! 🇨🇭`);
+        alert(`🇨🇭 Démo Pitch : Redirection simulée vers le panier digital de ${magasin}. Prêt à présenter le projet aux investisseurs !`);
     }
 
-    // Lancer au chargement initial
-    window.onload = mettreAJour;
+    window.onload = actualiserApp;
 </script>
 
 </body>
